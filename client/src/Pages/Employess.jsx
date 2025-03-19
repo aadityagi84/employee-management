@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { MdDelete } from "react-icons/md";
 import axios from "axios";
 import { apiData } from "../Constants/Utils";
 
@@ -57,6 +58,16 @@ const Employees = () => {
     setUpdateEmployee({ ...updateEmployee, [name]: value });
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(apiData.getEmployeeById(id));
+      console.log(res);
+      alert(res.data.message);
+      fetchEmployees();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     try {
@@ -124,8 +135,8 @@ const Employees = () => {
         <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">{error}</div>
       )}
 
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left text-gray-700 bg-white rounded-lg">
+      <div className="relative overflow-x-auto ">
+        <table className="w-[60%] mx-auto text-sm text-left shadow-md sm:rounded-lg border  text-gray-700 bg-white rounded-lg">
           <thead className="text-xs text-gray-700 uppercase bg-gray-100">
             <tr>
               <th className="px-6 py-3">Name</th>
@@ -149,12 +160,18 @@ const Employees = () => {
                 >
                   <td className="px-6 py-4">{employee.name}</td>
                   <td className="px-6 py-4">{employee.position}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 flex gap-2">
                     <button
                       className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
                       onClick={() => handleDetails(employee)}
                     >
                       More Details
+                    </button>
+                    <button
+                      className="bg-red-600 text-white px-4 py-2 rounded transition-colors"
+                      onClick={() => handleDelete(employee.id)}
+                    >
+                      <MdDelete />
                     </button>
                   </td>
                 </tr>
